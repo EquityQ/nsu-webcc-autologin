@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebCC 东软校园网自动认证</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1 class="title">东软 WebCC 自动上网</h1>
+        <p class="subtitle">cc.nsu.edu.cn 校园网助手</p>
+      </div>
+      <span id="statusBadge" class="badge badge-idle">未检测</span>
+    </header>
+
+    <section class="card status-card">
+      <div class="status-main">
+        <div id="statusMessage" class="status-message">正在读取当前状态…</div>
+        <div id="pauseBanner" class="pause-banner hidden"></div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">本机 IP</span>
+          <span id="metaIp" class="meta-value">-</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">当前套餐</span>
+          <span id="metaPackage" class="meta-value">-</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">同时在线</span>
+          <span id="metaOnlineCount" class="meta-value">-</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">上次检测</span>
+          <span id="metaTime" class="meta-value">-</span>
+        </div>
+      </div>
+
+      <div id="onlineDevicesBox" class="devices-box hidden"></div>
+
+      <div class="actions">
+        <button id="btnRunNow" type="button" class="btn btn-primary">立即登录上线</button>
+        <button id="btnRefresh" type="button" class="btn btn-secondary">刷新状态</button>
+        <button id="btnOffline" type="button" class="btn btn-danger">下线本机</button>
+        <button id="btnOpenPortal" type="button" class="btn btn-ghost">打开认证页</button>
+      </div>
+    </section>
+
+    <section class="card settings-card">
+      <div class="section-head">
+        <h2 class="section-title">账号与策略设置</h2>
+        <span id="saveTip" class="save-tip"></span>
+      </div>
+
+      <form id="settingsForm" class="form">
+        <label class="switch-row">
+          <span>启用自动登录上线</span>
+          <input id="enabled" type="checkbox" class="switch-input" />
+        </label>
+
+        <div class="field">
+          <label for="accountType">账号类型</label>
+          <select id="accountType">
+            <option value="normal">学生 / 教职工账号</option>
+            <option value="visitor">访客账号（手机号）</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="username">校园网账号</label>
+          <input id="username" type="text" autocomplete="username" placeholder="请输入学号 / 工号 / 访客手机号" />
+        </div>
+
+        <div class="field">
+          <label for="password">校园网密码</label>
+          <div class="password-wrap">
+            <input id="password" type="password" autocomplete="current-password" placeholder="请输入校园网密码" />
+            <button id="btnTogglePwd" type="button" class="btn-eye" title="显示或隐藏密码">显示</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="preferredPackage">首选套餐（选填）</label>
+          <input id="preferredPackage" type="text" placeholder="留空自动选择第一个可用套餐" />
+          <div id="packageChips" class="chips hidden"></div>
+        </div>
+
+        <label class="switch-row">
+          <div>
+            <div>在线设备已满时自动顶掉旧设备</div>
+            <div class="hint">默认关闭；开启后将自动下线其他已在线 IP</div>
+          </div>
+          <input id="autoKickOtherDevice" type="checkbox" class="switch-input" />
+        </label>
+
+        <div class="field-inline">
+          <label for="checkIntervalMinutes">后台检测间隔</label>
+          <select id="checkIntervalMinutes">
+            <option value="1">每 1 分钟</option>
+            <option value="2">每 2 分钟</option>
+            <option value="5">每 5 分钟</option>
+            <option value="10">每 10 分钟</option>
+          </select>
+        </div>
+
+        <label class="switch-row">
+          <span>开启桌面状态通知</span>
+          <input id="showNotifications" type="checkbox" class="switch-input" />
+        </label>
+
+        <button id="btnSave" type="submit" class="btn btn-save">保存设置</button>
+      </form>
+
+      <p class="security-note">
+        隐私说明：你的账号与密码仅保存在本机浏览器本地存储中，只用于向 <code>https://cc.nsu.edu.cn/Auth.ashx</code> 发起认证请求。
+      </p>
+    </section>
+
+    <details class="card logs-card">
+      <summary class="logs-summary">
+        <span>最近运行记录</span>
+        <button id="btnClearLogs" type="button" class="btn-link">清空</button>
+      </summary>
+      <ul id="logsList" class="logs-list">
+        <li class="log-empty">暂无记录</li>
+      </ul>
+    </details>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
